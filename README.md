@@ -23,6 +23,10 @@ This repository contains the source code for an AI-powered application designed 
 - Computer Vision
 - Machine Learning
 
+### Demo Video
+
+https://youtu.be/XxWofniQOWQ?si=AftJy086niiUMMur
+
 ### Contribution Guidelines:
 If you'd like to contribute to the project, please follow the guidelines outlined in the [CONTRIBUTING.md](CONTRIBUTING.md) file.
 
