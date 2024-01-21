@@ -1,0 +1,25 @@
+/* MovingText.css */
+
+@keyframes moveLeftToRight {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(100%);
+    }
+  }
+  
+  .moving-text-container {
+    overflow: visible;
+    position: relative;
+    width: 100%;
+  }
+  
+  .moving-text {
+    white-space: nowrap;
+    animation: moveLeftToRight 30s linear infinite; 
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  
