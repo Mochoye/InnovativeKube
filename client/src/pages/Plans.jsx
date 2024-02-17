@@ -1,6 +1,14 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux/es/hooks/useSelector';
 import photo from '../assets/diet2.jpg'
+import {
+  Button,
+  Dialog,
+  DialogHeader,
+  DialogBody,
+  DialogFooter,
+} from "@material-tailwind/react"
+import { Transition } from '@headlessui/react';
 
 // import './styles/tailwind.css'; // Import Tailwind CSS styles
 
@@ -10,9 +18,15 @@ export default function Plans() {
   const [daysToAchieve, setDaysToAchieve] = useState(0);
   const [height, setHeight] = useState(0);
   const [male, setMale] = useState(0);
-  const [female, setFemale] = useState(0);
+  const [female, setFemale] = useState(1);
   const [activityLevel,setActivityLevel]=useState(1.5)
   const [age, setAge] = useState(0);
+
+  const [result,setResult]=useState(0);
+
+  const [open, setOpen] = React.useState(false);
+ 
+  const handleOpen = () => setOpen(!open);
 
   const { currentUser } = useSelector((state) => state.user);
 
@@ -48,7 +62,7 @@ export default function Plans() {
       })
     });
     const data = await res.json();
-    console.log(data);
+    setResult(data.result)
   };
 
   if (!currentUser) {
@@ -56,9 +70,10 @@ export default function Plans() {
   }
 
   return (
+    <>
     <div className="flex h-screen w-screen">
   <div className="flex-1">
-  <div className="max-w-md mx-auto bg-white rounded p-8 mt-20 shadow-md">
+  <div className="max-w-md mx-auto bg-white rounded p-8 mt-10 shadow-md">
       <h1 className="text-2xl font-bold mb-4">Weight Goal Form</h1>
       <form onSubmit={handleSubmit} className="flex flex-col">
         <label className="mb-4">
@@ -150,7 +165,7 @@ export default function Plans() {
           />
         </label>
 
-        <button type="submit" className="bg-green-500 text-white p-2 rounded hover:bg-green-700">
+        <button type="submit" className="bg-green-500 text-white p-2 rounded hover:bg-green-700" onClick={handleOpen}>
           Submit
         </button>
       </form>
@@ -158,8 +173,42 @@ export default function Plans() {
   </div>
   <div className="flex-1"  style={{ backgroundImage: `url(${photo})`, backgroundSize: 'cover' }}> </div>
 
-  </div>
+  
 
-    
+  </div>
+  {result!=0 && 
+
+<Transition show={open} as="div" className="fixed inset-0 overflow-y-auto">
+<div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+  <Transition.Child
+    as="div"
+    className="fixed inset-0 transition-opacity"
+    onClick={handleOpen}
+  >
+    <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+  </Transition.Child>
+
+  {/* This element is to trick the browser into centering the modal contents. */}
+  <span className="hidden sm:inline-block sm:align-middle sm:h-screen"></span>
+
+  <Transition.Child
+    as="div"
+    className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:w-full sm:max-w-lg"
+  >
+    <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+      <DialogHeader>To reach your desired weight according to your current physical condition, your daily calorie intake should be:</DialogHeader>
+      <DialogBody>{result}</DialogBody>
+    </div>
+    <DialogFooter>
+      
+      <Button variant="gradient" className='pl-2 text-green-700' onClick={handleOpen}>
+        <span>Confirm</span>
+      </Button>
+    </DialogFooter>
+  </Transition.Child>
+</div>
+</Transition>
+  }
+  </>
   );
 }

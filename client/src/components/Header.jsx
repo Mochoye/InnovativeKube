@@ -2,10 +2,10 @@ import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 export default function Header() {
-  const { currentUser } = useSelector((state) => state.user);
+  const { currentUser } = useSelector((state) => state.user)||"";
 
   return (
-    <div className='fixed top-0 w-full bg-slate-200 bg-opacity-80'>
+    <div className='fixed top-0 w-full bg-slate-200 bg-opacity-80 z-10'>
       <div className='flex justify-between items-center max-w-6xl mx-auto p-3'>
         <Link to='/'>
           <h1 className='font-bold text-green-500'>health<span className='text-yellow-500 text-2xl'>E</span>fy</h1>
