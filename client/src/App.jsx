@@ -8,6 +8,7 @@ import Header from './components/Header';
 import PrivateRoute from './components/PrivateRoute';
 import Plans from './pages/Plans';
 import Diet from './pages/Diet'
+import Exercise from './pages/Exercise'
 
 export default function App() {
   return (
@@ -21,6 +22,7 @@ export default function App() {
         <Route path='/sign-up' element={<SignUp />} />
         <Route path='/predict' element={<Plans />} />
         <Route path='/diet' element={<Diet />} />
+        <Route path='/exercise' element={<Exercise />} />
         <Route element={<PrivateRoute />}>
           <Route path='/profile' element={<Profile />} />
         </Route>
