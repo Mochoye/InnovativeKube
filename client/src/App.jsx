@@ -9,6 +9,7 @@ import PrivateRoute from './components/PrivateRoute';
 import Plans from './pages/Plans';
 import Diet from './pages/Diet'
 import Exercise from './pages/Exercise'
+import Dashboard from './pages/Dashboard';
 
 export default function App() {
   return (
@@ -23,7 +24,9 @@ export default function App() {
         <Route path='/predict' element={<Plans />} />
         <Route path='/diet' element={<Diet />} />
         <Route path='/exercise' element={<Exercise />} />
+        
         <Route element={<PrivateRoute />}>
+        <Route path='/dashboard' element={<Dashboard />} />
           <Route path='/profile' element={<Profile />} />
         </Route>
       </Routes>

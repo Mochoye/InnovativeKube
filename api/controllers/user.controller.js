@@ -54,3 +54,36 @@ export const deleteUser = async (req, res, next) => {
   }
 
 }
+
+//add Vitals
+
+export const addVitals=async(req,res,next)=>{
+  if(req.user.id!=req.params.id)
+  {
+    return next(errorHandler(401, 'You can add vitals to your account'));
+  }
+  try {
+    if (req.body.password) {
+      req.body.password = bcryptjs.hashSync(req.body.password, 10);
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+      req.params.id,
+      {
+        $set: {
+          weight:req.body.weight,
+          gender:req.body.gender,
+          height:req.body.height,
+          height:req.body.height,
+          age:req.body.age,
+          activity_level:req.body.activity_level
+        },
+      },
+      { new: true }
+    );
+    const { password, ...rest } = updatedUser._doc;
+    res.status(200).json(rest);
+  } catch (error) {
+    next(error);
+  }
+}
