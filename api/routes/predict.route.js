@@ -1,8 +1,8 @@
-import express from 'express';
-import {calories } from '../controllers/predict.controller.js';
+// import express from 'express';
+// import {calories } from '../controllers/predict.controller.js';
 
-const router = express.Router();
+// const router = express.Router();
 
-router.post('/calories', calories);
+// router.post('/calories', calories);
 
-export default router;
+// export default router;

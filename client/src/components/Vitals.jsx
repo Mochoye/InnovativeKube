@@ -1,34 +1,56 @@
 import React, { useState } from "react";
+import { useSelector } from 'react-redux';
+import { Link } from "react-router-dom";
+
 import {
   Button,
   Dialog,
   Card,
-  CardHeader,
   CardBody,
   CardFooter,
   Typography,
   Input,
-  Checkbox,
   Select,
 } from "@material-tailwind/react";
 
 export default function Vitals({ open, setOpen }) {
-  const [gender, setGender] = useState(""); 
-  const [height, setHeight] = useState(0);
-  const [male, setMale] = useState(0);
-  const [female, setFemale] = useState(1);
-  const [activityLevel,setActivityLevel]=useState(1.5)
-  const [age, setAge] = useState(0);
+  const { currentUser } = useSelector((state) => state.user) ?? { currentUser: null };
+  const [formData, setFormData] = useState({
+    age: 0,
+    weight: 0,
+    height: 0,
+    gender: "",
+    activityLevel: 1.5,
+    userRef: currentUser ? currentUser._id : null
+  });
 
   const handleOpen = () => setOpen((cur) => !cur);
 
-  const handleGenderChange = (selectedGender) => {
-    setGender(selectedGender);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
-  const handleSubmit=async()=>{
-
-  }
+  const handleSubmit = async () => {
+    try {
+      const response = await fetch("your-api-endpoint", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ...formData,
+          userRef: currentUser ? currentUser._id : null,
+        }),
+      });
+      const data = await response.json();
+      console.log(data); 
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
 
   return (
     <>
@@ -53,60 +75,71 @@ export default function Vitals({ open, setOpen }) {
             <Typography className="-mb-2" variant="h6">
               Age
             </Typography>
-            <Input size="lg" />
+            <Input
+              size="lg"
+              name="age"
+              value={formData.age}
+              onChange={handleChange}
+            />
             <Typography className="-mb-2" variant="h6">
               Weight
             </Typography>
-            <Input size="lg" />
+            <Input
+              size="lg"
+              name="weight"
+              value={formData.weight}
+              onChange={handleChange}
+            />
             <Typography className="-mb-2" variant="h6">
               Height
             </Typography>
-            <Input size="lg" />
+            <Input
+              size="lg"
+              name="height"
+              value={formData.height}
+              onChange={handleChange}
+            />
             <Typography className="-mb-2" variant="h6">
               Gender
             </Typography>
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2">
-                <input
-                  type="radio"
-                  id="male"
-                  name="gender"
-                  value="male"
-                  onChange={() => {setMale(1);setFemale(0)}}
-                />
-                <label htmlFor="male">Male</label>
-              </div>
-              <div className="flex items-center gap-2">
-                <input
-                  type="radio"
-                  id="female"
-                  name="gender"
-                  value="female"
-                  onChange={() => {setMale(0);setFemale(1)}}
-                />
-                <label htmlFor="female">Female</label>
-              </div>
-            </div>
+            <Select
+              size="lg"
+              name="gender"
+              value={formData.gender}
+              onChange={handleChange}
+            >
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+            </Select>
             <Typography className="-mb-2" variant="h6">
               Activity level:
             </Typography>
-            <div className="flex items-center gap-4">
-              <Select
-                size="lg"
-                value={activityLevel}
-                onChange={(e) => setActivityLevel(e.target.value)}
-              >
-                <option value="amateur">Amateur</option>
-                <option value="medium">Medium</option>
-                <option value="advanced">Advanced</option>
-              </Select>
-            </div>
+            <Select
+              size="lg"
+              name="activityLevel"
+              value={formData.activityLevel}
+              onChange={handleChange}
+            >
+              <option value="amateur">Amateur</option>
+              <option value="medium">Medium</option>
+              <option value="advanced">Advanced</option>
+            </Select>
           </CardBody>
           <CardFooter className="pt-0">
-            <Button variant="gradient" onClick={handleOpen} fullWidth className="bg-green-600">
+            <Link to={"/"}>
+            <Button
+              variant="gradient"
+              onClick={handleSubmit}
+              fullWidth
+              className="bg-green-600"
+            >
               Submit
             </Button>
-            <Typography variant="small" className="mt-4 flex justify-center">
+            </Link>
+            <Typography
+              variant="small"
+              className="mt-4 flex justify-center"
+            >
               Don&apos;t have an account?
               <Typography
                 as="a"
